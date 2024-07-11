@@ -7,6 +7,10 @@
 ##############################################################################
 # Define directory names and containers
 
+subject=$1
+session=$2
+base_filename=$3
+
 FLYWHEEL_BASE=/flywheel/v0
 INPUT_DIR=$FLYWHEEL_BASE/input/
 OUTPUT_DIR=$FLYWHEEL_BASE/output
@@ -62,8 +66,6 @@ if [[ -e $input_file ]]; then
   elif [[ "$input_file" == *.nii.gz ]]; then
     type=".nii.gz"
   fi
-  # Get the base filename
-  base_filename=`basename "$input_file" $type`
   
 else
   echo "${CONTAINER}: No inputs were found within input directory $INPUT_DIR"
@@ -75,10 +77,6 @@ fi
 
 # Set initial exit status
 recon_all_clinical_exit_status=0
-
-# Set base output_file name
-output_file=$WORKDIR/"$base_filename"'_recon_all_clinical'
-echo "output_file is $output_file"
 
 
 if [[ $config_rob == 'true' ]]; then
@@ -93,13 +91,18 @@ if [[ -e $input_file ]]; then
   recon_all_clinical_exit_status=$?
 fi
 
-############################################################################## check output is a nice format 
-
-
+# Step 3: Copy output files to the output directory
 #mri_convert $WORKDIR/$base_filename/mri/synthseg.mgz $OUTPUT_DIR/synthseg.nii
-cp $WORKDIR/$base_filename/stats/synthseg.vol.csv $OUTPUT_DIR/synthseg.vol.csv
-cp $WORKDIR/$base_filename/stats/synthseg.qc.csv $OUTPUT_DIR/synthseg.qc.csv
-zip -r $OUTPUT_DIR/$base_filename.zip $WORKDIR
+cp $WORKDIR/$base_filename/stats/synthseg.vol.csv $WORKDIR/synthseg.vol.csv
+cp $WORKDIR/$base_filename/stats/synthseg.qc.csv $WORKDIR/synthseg.qc.csv
+zip -r $OUTPUT_DIR/$base_filename.zip $WORKDIR/$base_filename
+
+
+# Step 4: Extract cortical thickness measures
+# Set SUBJECTS_DIR to the work directory
+export SUBJECTS_DIR=$WORKDIR
+aparcstats2table --subjects $base_filename --hemi lh --meas thickness --parc=aparc --tablefile=$WORKDIR/aparc_lh.csv
+aparcstats2table --subjects $base_filename --hemi rh --meas thickness --parc=aparc --tablefile=$WORKDIR/aparc_rh.csv
 
   
 # Handle Exit status

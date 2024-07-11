@@ -1,4 +1,12 @@
 # Changelog
+11/07/2024
+Version 0.3.0
+- Made changes to make the ouputs more BIDS compliant
+- Setup cortical thickness output
+- Zipped output for easier debugging
+NOTE:
+- Major changes implemented, need to test thoroughly
+
 10/07/2024
 Version 0.2.9
 - Successfully run

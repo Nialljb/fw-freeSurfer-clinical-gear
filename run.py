@@ -7,8 +7,8 @@ import sys
 # import flywheel functions
 from flywheel_gear_toolkit import GearToolkitContext
 from app.command_line import exec_command
-from utils.gatherDemographics import get_demo
 from app.parser import parse_config
+from utils.curate_output import housekeeping
 
 # Add top-level package directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -23,15 +23,17 @@ log = logging.getLogger(__name__)
 
 def main(context: GearToolkitContext) -> None:
     # """Parses config and runs."""
-    # gear_inputs, gear_options, app_options = parse_config(context)
+    subject_label, session_label, input_label = parse_config(context)
     
     print("running main.sh...")
     command = "/flywheel/v0/app/main.sh"
+    # Add the input path and age to the command
+    command = f"{command} {subject_label} {session_label} {input_label}"
     exec_command(command,shell=True,cont_output=True)
 
-    # # Add demographic data to the output
-    # print("concatenating demographics...")
-    # get_demo(context)
+    # Add demographic data to the output
+    print("concatenating demographics...")
+    housekeeping(context)
 
 # Only execute if file is run as main, not when imported by another module
 if __name__ == "__main__":  # pragma: no cover
