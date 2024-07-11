@@ -10,7 +10,9 @@ __pycache__
 
 # Confidential
 config.json
-run.sh
+license.txt
+interactive-run.py
 
 # large project files
 app/templates%   
+fslinstaller.py
