@@ -119,12 +119,12 @@ def housekeeping(context):
     filePath = '/flywheel/v0/work/aparc_lh.csv'
     with open(filePath) as csv_file:
         lh_thickness = pd.read_csv(csv_file, index_col=None, header=0) 
-        lh_thickness = lh_thickness.drop('lh.aparc.thickness', axis=1)
+        # lh_thickness = lh_thickness.drop('lh.aparc.thickness', axis=1)
 
     filePath = '/flywheel/v0/work/aparc_rh.csv'
     with open(filePath) as csv_file:
         rh_thickness = pd.read_csv(csv_file, index_col=None, header=0) 
-        rh_thickness = rh_thickness.drop('rh.aparc.thickness', axis=1)
+        # rh_thickness = rh_thickness.drop('rh.aparc.thickness', axis=1)
 
     # smush the data together
     frames = [demo, lh_thickness, rh_thickness]

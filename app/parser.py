@@ -31,6 +31,7 @@ def parse_config(context):
     session_container = context.client.get(session_id)
     session = session_container.reload()
     session_label = session.label
+    session_label = session_label.replace(" ", "_")
     print("session label: ", session.label)
     
 
