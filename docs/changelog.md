@@ -1,4 +1,9 @@
 # Changelog
+14/01/2025
+Version 0.4.0
+- Added fix for potential `recon-all` error
+- Added in segmentation & SynthSR output for QC
+
 11/07/2024
 Version 0.3.0
 - Made changes to make the ouputs more BIDS compliant

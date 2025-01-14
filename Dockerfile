@@ -28,28 +28,15 @@ RUN pip3 install flywheel-gear-toolkit && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     cp license.txt /usr/local/freesurfer/.license
 
-# # setup fs env
-# ENV PATH /usr/local/freesurfer/bin:/usr/local/freesurfer/fsfast/bin:/usr/local/freesurfer/tktools:/usr/local/freesurfer/mni/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-# ENV FREESURFER_HOME /usr/local/freesurfer
-# ENV FREESURFER /usr/local/freesurfer
-
-# # FSL setup
-# #Install miniconda
-# RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-# /bin/bash ~/miniconda.sh -b -p /opt/conda
-# ENV CONDA_DIR /opt/conda
-# # store the FSL public conda channel
-# ENV FSL_CONDA_CHANNEL="https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/public"
-# # install tini into base conda environment
-# RUN /opt/conda/bin/conda install -n base -c conda-forge tini -y
-# RUN /opt/conda/bin/conda install -n base -c $FSL_CONDA_CHANNEL fsl-base fsl-utils fsl-avwutils -c conda-forge
-# # set FSLDIR so FSL tools can use it, in this minimal case, the FSLDIR will be the root conda directory
-# ENV PATH="/opt/conda/bin:${PATH}"
-# ENV FSLDIR="/opt/conda"
+# copy ctx fix to freesurfer python scripts
+RUN mv /usr/local/freesurfer/bin/recon-all-clinical.sh /usr/local/freesurfer/bin/DEPRICATED_recon-all-clinical.sh
+RUN cp ./recon-all-clinical-fix.sh /usr/local/freesurfer/bin/recon-all-clinical.sh
 
 # Configure entrypoint
 RUN bash -c 'chmod +rx $FLYWHEEL/run.py' && \
-    bash -c 'chmod +rx $FLYWHEEL/app/'
+    bash -c 'chmod +rx $FLYWHEEL/app/' && \
+    bash -c 'chmod +rx $FLYWHEEL/start.sh'&& \
+    bash -c 'chmod +rx ${FLYWHEEL}/app/main.sh' \
+    bash -c 'chmod +rx /usr/local/freesurfer/bin/recon-all-clinical.sh'
 
-ENTRYPOINT ["python3","/flywheel/v0/start.sh"] 
-# Flywheel reads the config command over this entrypoint
+ENTRYPOINT ["bash", "/flywheel/v0/start.sh"] 

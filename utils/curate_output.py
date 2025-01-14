@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 import re
 import os
+import shutil
 
 #  Module to identify the correct template use for the subject VBM analysis based on age at scan
 #  Need to get subject identifiers from inside running container in order to find the correct template from the SDK
@@ -122,15 +123,6 @@ def housekeeping(context):
     filePath = '/flywheel/v0/work/aparc_rh.csv'
     rh_thickness = pd.read_csv(filePath, sep='\t', engine='python')
 
-    # with open(filePath) as csv_file:
-    #     lh_thickness = pd.read_csv(csv_file, index_col=None, header=0) 
-    #     # lh_thickness = lh_thickness.drop('lh.aparc.thickness', axis=1)
-
-    # filePath = '/flywheel/v0/work/aparc_rh.csv'
-    # with open(filePath) as csv_file:
-    #     rh_thickness = pd.read_csv(csv_file, index_col=None, header=0) 
-    #     # rh_thickness = rh_thickness.drop('rh.aparc.thickness', axis=1)
-
     # smush the data together
     frames = [demo, lh_thickness, rh_thickness]
     df = pd.concat(frames, axis=1)
@@ -164,6 +156,17 @@ def housekeeping(context):
     outdir = ('/flywheel/v0/output/' + out_name)
     df.to_csv(outdir)
     
+
+    # Segmentation output
+    synthSR_path = '/flywheel/v0/work/synthSR.nii.gz'
+    aseg_path = '/flywheel/v0/work/aparc+aseg.nii.gz'
+
+    # New file name with label
+    SR_output = f"/flywheel/v0/output/{cleaned_string}_synthSR.nii.gz"
+    aseg_output = f"/flywheel/v0/output/{cleaned_string}_aparc+aseg.nii.gz"
+
+    shutil.copy(synthSR_path, SR_output)
+    shutil.copy(aseg_path, aseg_output)
 
     # # -------------------  Generate QC image  -------------------  #
 

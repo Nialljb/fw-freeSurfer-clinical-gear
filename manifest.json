@@ -1,7 +1,7 @@
 {
   "author": "Anastasia Smirnova, Niall Bourke",
   "cite": "recon-all-clinical: Out of the box cortical surface reconstruction and analysis of heterogenous scans https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all-clinical ",
-  "command": "python3 /flywheel/v0/run.py",
+  "command": "bash /flywheel/v0/start.sh",
   "config": {},
   "custom": {
     "analysis-level": "participant",
@@ -26,7 +26,7 @@
     },
     "gear-builder": {
       "category": "analysis",
-      "image": "flywheel/recon-all-clinical:0.3.2"
+      "image": "flywheel/recon-all-clinical:0.4.0"
     },
     "kcl-app-binary": "app/main.sh",
     "kcl-app-modalities": [
@@ -96,5 +96,5 @@
   "name": "recon-all-clinical",
   "source": "https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all-clinical",
   "url": "https://surfer.nmr.mgh.harvard.edu/",
-  "version": "0.3.2"
+  "version": "0.4.0"
 }
